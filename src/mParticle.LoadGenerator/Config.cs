@@ -8,9 +8,14 @@ namespace mParticle.LoadGenerator
     /// </summary>
     public class Config
     {
+        public int SecondsPerRate { get; set; }
+
         public string ServerURL { get; set; }
+
         public uint TargetRPS { get; set; }
+
         public string AuthKey { get; set; }
+
         public string UserName { get; set; }
 
         /// <summary>
@@ -22,9 +27,9 @@ namespace mParticle.LoadGenerator
         {
             try
             {
-                using (FileStream argumentsFileStream = new FileStream(argumentsFilePath, FileMode.Open))
+                using (var argumentsFileStream = new FileStream(argumentsFilePath, FileMode.Open))
                 {
-                    using (StreamReader argumentsReader = new StreamReader(argumentsFileStream))
+                    using (var argumentsReader = new StreamReader(argumentsFileStream))
                     {
                         return ParseArguments(argumentsReader.ReadToEnd());
                     }
@@ -36,10 +41,10 @@ namespace mParticle.LoadGenerator
                 return null;
             }
         }
-        
+
         internal static Config ParseArguments(string argumentsText)
         {
-            bool success = true;
+            var success = true;
             Config arguments;
 
             try
@@ -62,7 +67,7 @@ namespace mParticle.LoadGenerator
 
         private static void ValidateArgument(string argument, string argumentName, ref bool success)
         {
-            if (argument == null || argument == "")
+            if (string.IsNullOrEmpty(argument))
             {
                 Console.WriteLine($"Must specify a nonempty value for {argumentName}.");
                 success = false;
@@ -78,6 +83,4 @@ namespace mParticle.LoadGenerator
             }
         }
     }
-
-
 }
