@@ -54,7 +54,6 @@ namespace mParticle.LoadGenerator
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine();
                         Console.Write($"Error - ${e.Message}");
                     }
                 }
