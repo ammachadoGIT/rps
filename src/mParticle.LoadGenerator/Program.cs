@@ -46,16 +46,9 @@ namespace mParticle.LoadGenerator
 
                 foreach (var task in tasks)
                 {
-                    try
-                    {
-                        task.Start();
-                        Console.WriteLine($"task {task.Id} started");
-                        await Task.Delay(1000 / currentRps);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.Write($"Error - ${e.Message}");
-                    }
+                    task.Start();
+                    Console.WriteLine($"task {task.Id} started");
+                    await Task.Delay(1000 / currentRps);
                 }
 
                 currentPower++;
@@ -71,16 +64,22 @@ namespace mParticle.LoadGenerator
                     targetRpsReached = true;
                 }
 
-                await Task.WhenAll(tasks);
+                try
+                {
+                    await Task.WhenAll(tasks);
+                    var successfulTasksCount = tasks.Count(task => task.Status == TaskStatus.RanToCompletion);
+                    Console.WriteLine($"Tasks executed successfully: {successfulTasksCount}");
 
-                var successfulTasksCount = tasks.Count(task => task.Status == TaskStatus.RanToCompletion);
-                Console.WriteLine($"Tasks executed successfully: {successfulTasksCount}");
+                    var failedTasks = tasks.Where(task => task.Status == TaskStatus.Faulted);
+                    Console.WriteLine($"Tasks failed: {failedTasks.Count()}");
 
-                var failedTasks = tasks.Where(task => task.Status == TaskStatus.Faulted);
-                Console.WriteLine($"Tasks failed: {failedTasks.Count()}");
-
-                Console.WriteLine();
-                LogStatus(currentRps, config.TargetRPS);
+                    Console.WriteLine();
+                    LogStatus(currentRps, config.TargetRPS);
+                }
+                catch (AggregateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 

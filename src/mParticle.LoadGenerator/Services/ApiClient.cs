@@ -9,7 +9,7 @@ namespace mParticle.LoadGenerator.Services
 {
     public class ApiClient
     {
-        private static int requestsSent = 0;
+        private static int requestsSent;
 
         private readonly Config config;
 
@@ -30,13 +30,26 @@ namespace mParticle.LoadGenerator.Services
 
         public async Task<MyRequestResponse> CallApiEndpointAsync()
         {
-            var myRequest = new MyRequest { Name = this.config.UserName, RequestsSent = (uint) ++requestsSent };
-
+            var myRequest = new MyRequest { Name = this.config.UserName, RequestsSent = (uint)++requestsSent };
             var requestBody = new StringContent(JsonConvert.SerializeObject(myRequest));
 
             var response = await this.client.PostAsync(this.postPath, requestBody);
-            response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<MyRequestResponse>(await response.Content.ReadAsStringAsync());
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<MyRequestResponse>(responseContent);
+                }
+                catch (Exception e)
+                {
+                    await Task.FromException<MyRequestResponse>(
+                        new HttpRequestException(JsonConvert.SerializeObject(e.Message)));
+                }
+            }
+            
+            return await Task.FromException<MyRequestResponse>(
+                       new HttpRequestException(JsonConvert.SerializeObject(response)));
         }
     }
 }
