@@ -47,9 +47,6 @@ namespace mParticle.LoadGenerator
                     try
                     {
                         task.Start();
-                        await task;
-
-                        Console.Write(".");
                         await Task.Delay(1000 / currentRps);
                     }
                     catch (Exception e)
