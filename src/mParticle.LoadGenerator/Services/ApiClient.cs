@@ -30,7 +30,7 @@ namespace mParticle.LoadGenerator.Services
 
         public async Task<MyRequestResponse> CallApiEndpointAsync()
         {
-            var myRequest = new MyRequest { Name = this.config.UserName, RequestsSent = (uint)++requestsSent };
+            var myRequest = new MyRequest { Name = this.config.UserName, RequestsSent = (uint) ++requestsSent };
             var requestBody = new StringContent(JsonConvert.SerializeObject(myRequest));
 
             var response = await this.client.PostAsync(this.postPath, requestBody);
@@ -47,7 +47,7 @@ namespace mParticle.LoadGenerator.Services
                         new HttpRequestException(e.Message));
                 }
             }
-            
+
             return await Task.FromException<MyRequestResponse>(
                        new HttpRequestException(JsonConvert.SerializeObject(response)));
         }
