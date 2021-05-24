@@ -1,5 +1,4 @@
-﻿using System;
-using mParticle.LoadGenerator;
+﻿using mParticle.LoadGenerator;
 using Xunit;
 
 namespace Tests
