@@ -32,7 +32,7 @@ namespace mParticle.LoadGenerator
             var targetRpsReached = false;
             var apiClient = new ApiClient(config, new HttpClient());
             var currentRps = 1;
-            var currentPower = 1;
+            var currentPower = 0;
 
             LogStatus(currentRps, config.TargetRPS);
 
