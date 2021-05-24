@@ -44,7 +44,7 @@ namespace mParticle.LoadGenerator.Services
                 catch (Exception e)
                 {
                     await Task.FromException<MyRequestResponse>(
-                        new HttpRequestException(JsonConvert.SerializeObject(e.Message)));
+                        new HttpRequestException(e.Message));
                 }
             }
             
