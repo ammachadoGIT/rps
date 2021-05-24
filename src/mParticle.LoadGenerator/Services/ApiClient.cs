@@ -34,10 +34,9 @@ namespace mParticle.LoadGenerator.Services
             
             try
             {
-                //var response = await this.client.PostAsync(this.postPath, requestBody);
-                //response.EnsureSuccessStatusCode();
-                //return JsonConvert.DeserializeObject<MyRequestResponse>(await response.Content.ReadAsStringAsync());
-                return await Task.FromResult(new MyRequestResponse() { Successful = true });
+                var response = await this.client.PostAsync(this.postPath, requestBody);
+                response.EnsureSuccessStatusCode();
+                return JsonConvert.DeserializeObject<MyRequestResponse>(await response.Content.ReadAsStringAsync());
             }
             catch (Exception e)
             {
