@@ -33,18 +33,10 @@ namespace mParticle.LoadGenerator.Services
             var myRequest = new MyRequest { Name = this.config.UserName, RequestsSent = (uint) ++requestsSent };
 
             var requestBody = new StringContent(JsonConvert.SerializeObject(myRequest));
-            
-            try
-            {
-                var response = await this.client.PostAsync(this.postPath, requestBody);
-                response.EnsureSuccessStatusCode();
-                return JsonConvert.DeserializeObject<MyRequestResponse>(await response.Content.ReadAsStringAsync());
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
+            var response = await this.client.PostAsync(this.postPath, requestBody);
+            response.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<MyRequestResponse>(await response.Content.ReadAsStringAsync());
         }
     }
 }
