@@ -242,3 +242,8 @@ pickle-email-*.html
 
 # Ignore node_modules
 node_modules/
+
+/.vs
+/StyleCop.Cache
+/src/mParticle.LoadGenerator/StyleCop.Cache
+/Tests/StyleCop.Cache
