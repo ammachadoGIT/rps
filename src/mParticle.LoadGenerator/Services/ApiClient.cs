@@ -9,6 +9,8 @@ namespace mParticle.LoadGenerator.Services
 {
     public class ApiClient
     {
+        private static int requestsSent = 0;
+
         private readonly Config config;
 
         private readonly HttpClient client;
@@ -28,7 +30,7 @@ namespace mParticle.LoadGenerator.Services
 
         public async Task<MyRequestResponse> CallApiEndpointAsync()
         {
-            var myRequest = new MyRequest { Name = this.config.UserName };
+            var myRequest = new MyRequest { Name = this.config.UserName, RequestsSent = (uint) ++requestsSent };
 
             var requestBody = new StringContent(JsonConvert.SerializeObject(myRequest));
             
