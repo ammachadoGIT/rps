@@ -67,19 +67,23 @@ namespace mParticle.LoadGenerator
                 try
                 {
                     await Task.WhenAll(tasks);
-                    var successfulTasksCount = tasks.Count(task => task.Status == TaskStatus.RanToCompletion);
-                    Console.WriteLine($"Tasks executed successfully: {successfulTasksCount}");
-
-                    var failedTasks = tasks.Where(task => task.Status == TaskStatus.Faulted);
-                    Console.WriteLine($"Tasks failed: {failedTasks.Count()}");
-
-                    Console.WriteLine();
-                    LogStatus(currentRps, config.TargetRPS);
                 }
-                catch (AggregateException ex)
+                catch (AggregateException e)
                 {
-                    Console.WriteLine(ex.Message);
+                    foreach (var ex in e.InnerExceptions)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 }
+
+                var successfulTasksCount = tasks.Count(task => task.Status == TaskStatus.RanToCompletion);
+                Console.WriteLine($"Tasks executed successfully: {successfulTasksCount}");
+
+                var failedTasks = tasks.Where(task => task.Status == TaskStatus.Faulted);
+                Console.WriteLine($"Tasks failed: {failedTasks.Count()}");
+
+                Console.WriteLine();
+                LogStatus(currentRps, config.TargetRPS);
             }
         }
 
