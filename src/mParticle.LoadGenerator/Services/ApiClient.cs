@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using mParticle.LoadGenerator.Models;
 using Newtonsoft.Json;
@@ -27,12 +28,12 @@ namespace mParticle.LoadGenerator.Services
             this.postPath = serverUri.AbsolutePath;
         }
 
-        public async Task<MyRequestResponse> CallApiEndpointAsync()
+        public async Task<MyRequestResponse> CallApiEndpointAsync(CancellationToken cancellationToken)
         {
             var myRequest = new MyRequest { Name = this.config.UserName, RequestsSent = (uint) ++requestsSent };
             var requestBody = new StringContent(JsonConvert.SerializeObject(myRequest));
 
-            var response = await this.client.PostAsync(this.postPath, requestBody);
+            var response = await this.client.PostAsync(this.postPath, requestBody, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 try
